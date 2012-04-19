@@ -35,6 +35,21 @@ from binary_http import application
 
 c = HttpClient('http://localhost:7789/', application)
 
+# This doesn't work:
+#
+#Traceback (most recent call last):
+#  File "./rpclib_client.py", line 50, in <module>
+#    print c.service.get(file_name="/tmp/some_big_file")
+#  File "/home/bob/.local/lib/python2.7/site-packages/rpclib-2.7.0_beta-py2.7.egg/rpclib/client/http.py", line 43, in __call__
+#    self.get_out_string(self.ctx) # sets ctx.out_string
+#  File "/home/bob/.local/lib/python2.7/site-packages/rpclib-2.7.0_beta-py2.7.egg/rpclib/client/_base.py", line 106, in get_out_string
+#    self.app.out_protocol.serialize(ctx, self.app.out_protocol.REQUEST)
+#  File "/home/bob/.local/lib/python2.7/site-packages/rpclib-2.7.0_beta-py2.7.egg/rpclib/protocol/http.py", line 300, in serialize
+#    assert message in (self.RESPONSE,)
+#AssertionError
+print c.service.get(file_name="/tmp/some_big_file")
+
+
 """
 u = c.factory.create("User")
 
