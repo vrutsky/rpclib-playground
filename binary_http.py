@@ -38,7 +38,7 @@ from rpclib.application import Application
 from rpclib.decorator import rpc
 from rpclib.decorator import srpc
 from rpclib.interface.wsdl import Wsdl11
-from rpclib.model.binary import ByteArray
+from rpclib.model.binary import ByteArray, File
 from rpclib.model.fault import Fault
 from rpclib.model.primitive import String
 from rpclib.protocol.http import HttpRpc
@@ -65,7 +65,7 @@ class DocumentArchiver(ServiceBase):
 
         return fname
 
-    @srpc(String, _returns=ByteArray)
+    @srpc(String, _returns=File)
     def get(file_path):
         '''This method loads a document from the specified file path
         and returns it. If the path isn't found, an exception is
@@ -78,14 +78,9 @@ class DocumentArchiver(ServiceBase):
         if not os.path.exists(file_path):
             raise Fault("Client.FileName", "File '%s' not found" % file_path)
 
-        document = open(file_path, 'rb').read()
+        document = File(name=os.path.split(file_path)[1], path=file_path)
 
-
-        # the service automatically loads the data from the file.
-        # alternatively, The data could be manually loaded into memory
-        # and loaded into the Attachment like:
-        #   document = Attachment(data=data_from_file)
-        return [document]
+        return document
 
 
 application = Application([DocumentArchiver], 'rpclib.examples.binary',
